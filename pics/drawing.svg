@@ -263,58 +263,34 @@
            id="tspan4196"
            sodipodi:role="line">Semantic Map</tspan></text>
     </g>
-    <g
-       id="g4634"
-       transform="translate(0,-1.0408012)">
-      <rect
-         ry="21.005157"
-         y="49.520088"
-         x="102.5301"
-         height="110.95982"
-         width="89.939095"
-         id="rect4198"
-         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.18789828;stroke-miterlimit:4;stroke-dasharray:7.12738985, 1.18789831;stroke-dashoffset:0;stroke-opacity:1" />
-      <rect
-         ry="10.708513"
-         y="60.162971"
-         x="112.11423"
-         height="36.244194"
-         width="70.94268"
-         id="rect4200"
-         style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:1.18789828;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
-      <rect
-         style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:1.18789828;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         id="rect4202"
-         width="70.94294"
-         height="36.244194"
-         x="112.1141"
-         y="113.59284"
-         ry="10.708513" />
-      <text
-         transform="scale(1.009561,0.99052956)"
-         sodipodi:linespacing="125%"
-         id="text4220"
-         y="81.681541"
-         x="120.49313"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.24189377px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           y="81.681541"
-           x="120.49313"
-           id="tspan4222"
-           sodipodi:role="line">Exploration</tspan></text>
-      <text
-         transform="scale(1.009561,0.99052956)"
-         xml:space="preserve"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:10.24189377px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         x="129.47728"
-         y="135.62225"
-         id="text4227"
-         sodipodi:linespacing="125%"><tspan
-           y="135.62225"
-           x="129.47728"
-           id="tspan4231"
-           sodipodi:role="line">Update</tspan></text>
-    </g>
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.18789828;stroke-miterlimit:4;stroke-dasharray:7.12738985, 1.18789831;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4198"
+       width="89.939095"
+       height="110.95982"
+       x="102.5301"
+       y="48.479286"
+       ry="21.005157" />
+    <rect
+       style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:0.97963893;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4200"
+       width="58.505188"
+       height="29.889954"
+       x="118.24705"
+       y="75.176109"
+       ry="8.8311234" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.446311px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="124.91274"
+       y="93.166443"
+       id="text4220"
+       sodipodi:linespacing="125%"
+       transform="scale(1.009561,0.99052955)"><tspan
+         sodipodi:role="line"
+         id="tspan4222"
+         x="124.91274"
+         y="93.166443">Exploration</tspan></text>
     <rect
        style="fill:#e6e6e6;fill-opacity:1;stroke:#000000;stroke-width:0.57170409;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4242"
@@ -458,5 +434,36 @@
          id="tspan8085"
          x="84.65361"
          y="91.059448">R/W</tspan></text>
+    <rect
+       ry="8.8311234"
+       y="116.94504"
+       x="118.24705"
+       height="29.889954"
+       width="58.505188"
+       id="rect3409"
+       style="fill:#cccccc;fill-opacity:1;stroke:#000000;stroke-width:0.97963893;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+    <text
+       transform="scale(1.009561,0.99052955)"
+       sodipodi:linespacing="125%"
+       id="text3411"
+       y="135.33459"
+       x="132.32199"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:8.44620514px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         id="tspan3415"
+         x="132.32199"
+         y="135.33459">Update</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:9.87777805px;line-height:125%;font-family:Arial;-inkscape-font-specification:'Arial, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="117.22636"
+       y="64.504166"
+       id="text3417"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3419"
+         x="117.22636"
+         y="64.504166">Map Manager</tspan></text>
   </g>
 </svg>
