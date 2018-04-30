@@ -46,12 +46,12 @@
 		\item $\cP$: predicates compliant with basic concept hierarchy
 	\end{itemize}
 	
-	More in detail, $\cM = \{\bO_i\}_{i=1 \dots N}$ is a collection of 3D objects, where each object is defined by:
+	More in detail, $\cM$ is a collection of 3D objects, where each object is defined by:
 	
 	\begin{itemize}
-		\item {\bf Label}: $l_i \in \mathcal{L}$,
+		\item {\bf Type}: $\bT = t_i , i=1 \dots N$,
 		\item {\bf Pose3D}: $\bX = [ \bR | \bt] \in SE(3)$,
-		\item {\bf Size3D}: $\bB = (\bm ,\bM) \in \mathbf{R}^{3 \times 2}$,
+		\item {\bf Size3D}: $\bS = <\bL ,\bU> \in \mathbf{R}^3 $,
 	\end{itemize}
 	
 	\noindent
@@ -67,30 +67,34 @@
 	
 	\section{Map Manager}
 	
-	The map manager has the task of incrementally updating the semantic map with new observations coming from sensors. The update of the map can be done by registering a local frame with the global model. Once objects are transformed in global frame, data association is performed to find correspondences between local and global map (object tracking) and update the global map accordingly.
+	The map manager has the task of incrementally update the semantic map with new observations coming from sensors. The update of the map can be done by registering a local frame with the global model. Once objects refer to the same global frame, data association is performed to find correspondences between local and global map and update the global map accordingly.
 	
-	\subsection{Data association} 
+	\subsection{Notation}
 	
-	Finds which objects in the global map $\cM^G$ correspond to the one observed in the local map $\cM^L$ (if any). This correspondence is evaluated through a similarity measure $d(O_i^G,O_j^L)$. So that, finding a correspondence $\bc_{i,j} = (\bO_i^G,\bO_j^L)$ consists in finding the object $\bO_j^L$ that satisfies:
+	\begin{itemize}
+		\item {\bf Object}: $ \bO = < \bT, \bX, \bS > $
+		\item {\bf Map}: $\cM = \{\bO_i\}$  
+		\item {\bf Correspondence}: $ \bc^{i,j}_k = <\bO_i^G,\bO_j^L> $
+	\end{itemize}
+	
+	\subsection{Matching} 
+	
+	{\bf Problem: }	Finding which objects in the global map $\cM^G$ correspond to the one observed in the local map $\cM^L$. This correspondence is evaluated through a similarity measure $d(O_i^G,O_j^L)$. Thus, finding a correspondence $\bc^{i,j}_k$ consists in finding the object $\bO_j^\star$ that satisfies:
 	
 	\begin{equation}
-		\bO_j^L = \argmin_{\bO_j^L}  d(O_i^G,O_j^L)
+		\bO_j^\star = \argmin_{\bO_j} \, d(O_i^G,O_j^L)
 	\end{equation}
-	
-	Usually, similarity is computed through euclidean distance. In our problem, it's possible to leverage also semantic information. In a simulated environment, the knowledge of the semantic class is perfect. In real world scenarios, object detectors return a probability distribution over semantic labels. In the first case, the corresponding object is the closest one with the same type. In the second case, euclidean distance could be weighted with class probabilities to represent a form of similarity measure.
-	
-	\hspace{1cm}
-	
+		
 	\noindent
 	{\bf Input: }
 	\begin{itemize}
-		\item {\bf Global Map}: $\cM^G = \{ \bO_i^G \}_{i=1 \dots N}$
-		\item {\bf Local Map}: $\cM^L = \{ \bO_j^L \}_{j=1 \dots M}$
+		\item {\bf Global Map}: $\cM^G_t = \{ \bO_i^G \}$
+		\item {\bf Local Map}: $\cM^L_t = \{ \bO_j^L \}$
 	\end{itemize}
 	\noindent
 	{\bf Output: }
 	\begin{itemize}
-		\item {\bf Correspondences}: $\cC = \{ \bc_{i,j}\}$		
+		\item {\bf Correspondences}: $\cC_t = \{\bc_k\}$		
 	\end{itemize}
 	\noindent
 	{\bf Approaches: }
@@ -99,6 +103,10 @@
 		\item kd-trees
 		\item neural networks
 	\end{itemize}
+	\noindent
+	{\bf Remarks: }
+	Usually, similarity is computed through euclidean distance. In our problem, it's possible to leverage also semantic information. In a simulated environment, the knowledge of the semantic class is perfect. In real world scenarios, object detectors return a probability distribution over semantic labels. In the first case, the corresponding object is the closest one with the same type. In the second case, euclidean distance could be weighted with class probabilities to represent a form of similarity measure.
+		
 		
 %	\begin{table}
 %		\begin{center}
@@ -118,19 +126,15 @@
 %		\label{tab:assoc}
 %	\end{table}
 	
-	\subsection{Data integration} 
+	\subsection{Update} 
 	
-	Integrates incoming information from local map into global map. Input: maps, correspondences. Output: updated global map. Steps: for each object in local map check if it's already been seen, yes: merge, no: add to map. This strategy may fail in case of false positives returned by data association. Possible solution:  aging scheme.
-	
-	
-	\hspace{1cm}
-	
+	{\bf Problem: } Integrating incoming information from local map into global map. Steps: for each object in local map check if it's already been seen, yes: merge, no: add to map. 
 	\noindent
 	{\bf Input: }
 	\begin{itemize}
-		\item {\bf Global Map}: $\cM_t^G = \{ \bO_i^G \}_{i=1 \dots N}$
-		\item {\bf Local Map}: $\cM_t^L = \{ \bO_j^L \}_{j=1 \dots M}$
-		\item {\bf Correspondences}: $\cC = \{ \bc_{i,j}\}$		
+		\item {\bf Global Map}: $\cM_t^G = \{ \bO_i^G \}$
+		\item {\bf Local Map}: $\cM_t^L = \{ \bO_j^L \}$
+		\item {\bf Correspondences}: $\cC_t = \{ \bc_k\}$		
 	\end{itemize}
 	\noindent
 	{\bf Output: }
@@ -143,8 +147,11 @@
 		\item vanilla
 		\item age-based
 	\end{itemize}
+	\noindent
+	{\bf Remarks: } This strategy may fail in case of false positives returned by data association. Possible solution:  aging scheme.
+	
 		
-	\section{Action Manager}
+	\section{Action}
 	
 	\subsection{Exploration} the exploration module has the task of navigating the robot in a way to improve its current knowledge of the environment. 
 	
@@ -152,18 +159,92 @@
 		
 	\section{Perception}
 
-	Our processing pipeline is made of three modules that exchange data structures among each other to build and maintain the semantic map.
+	The perception module takes every frame coming from the RGB-D camera and has to tell which objects are seen by the robot. This information will be passed to the map manager so to update the robot knowledge of the environment.
+	
+	\subsection{Notation}
+	
+	\begin{itemize}
+		\item {\bf Label}: $l_i \in \cL , i=1 \dots N$
+		\item {\bf Pixel}: $\bx = (u,v) \subset \mathbf{N}^2 $
+%		\item {\bf Size2D}: $\bs = < \btl , \bbr > \in \mathbf{N}^2 $
+		\item {\bf RGB image}: $I(\bx) : \bx \rightarrow (r,g,b) \in \mathbf{N}^3$
+		\item {\bf Depth image}: $D(\bx) : \bx \rightarrow d \in \mathbf{R}$		
+		\item {\bf Label image}: $L(\bx) : \bx \rightarrow l_i \in \cL$		
+%		\item {\bf Detection}: $ \bd = < l, \bx, \bs > $
+	\end{itemize}
 	
 	\subsection{Filtering}
 	
-	This module is in charge of triggering the acquisition of sensor data to update the semantic map.
+	{\bf Problem: } Deciding when to acquire a frame.
 
-	\subsection{Detection \& Classification}
+	\noindent
+	{\bf Input: }
+	\begin{itemize}
+		\item {\bf RGB Image}: $I$
+		\item {\bf Depth Image}: $D$
+	\end{itemize}
+	\noindent
+	{\bf Output: }
+	\begin{itemize}
+		\item {\bf Trigger}: $t = \{0,1\}$
+	\end{itemize}
+	\noindent
+	{\bf Approaches: }
+	\begin{itemize}
+		\item \dots
+	\end{itemize}
+	\noindent
+	{\bf Remarks: } \dots
 	
-	The perception module is in charge of localizing and classifying objects in the current frame to label each image pixel with its semantic class. More formally, given an image $I \subset \mathbf{N}^{3 \times 2}$ and a set of semantic labels $\mathcal{L} = \{l_i\}_{i=1 \dots L}$, computes an assignment of labels $l_i \in \mathcal{L}$ to each image pixel $x = (u,v) \in I$ .
+	\subsection{Recognition}
+	 
+	{\bf Problem: } Finding instances of known class objects in the input image. More formally, given an RGB image $I$ and a set of semantic labels $\cL$, computes an assignment $L$ of labels $l_i$ to each image pixel $\bx$.
 	
-	\subsection{Localization \& Extraction}
+	\noindent
+	{\bf Input: }
+	\begin{itemize}
+		\item {\bf RGB Image}: $I$
+		\item {\bf Semantic Labels}: $\cL = \{l_i\}$
+	\end{itemize}
+	\noindent
+	{\bf Output: }
+	\begin{itemize}
+		\item {\bf Label Image}: $L$
+	\end{itemize}
+	\noindent
+	{\bf Approaches: }
+	\begin{itemize}
+		\item appearance (all computer vision approaches)
+		\item geometry (3d object recognition)
+	\end{itemize}
+	\noindent
+	{\bf Remarks: } In a simulated environment it's possible to execute this task by performing only geometrical computations, since one knows the pose of the objects and the robot in the world \dots
 	
-	Feature extraction is performed by taking the output of the perception module and building a 3D object (atomic entity of the map) from each detection. After that, by knowing the pose of the robot in the global frame, it's possible to transform the extracted objects in the global frame to find correspondences (data association).
+	\subsection{Extraction}
+	
+	{\bf Problem: } Building local map from the set of detected objects. The first step is to group together pixels with the same semantic label $l_i$. Next, with the depth image $D$, it's possible to recover the 3D position of each image pixel. From this information, the object pose and its size can be inferred, so to build an object:
+	
+	\begin{equation}
+	 \bO = < \bT, \bX, \bS > 
+	\end{equation}
+	
+	\noindent
+	{\bf Input: }
+	\begin{itemize}
+		\item {\bf Label Image}: $L$
+		\item {\bf Depth Image}: $D$
+	\end{itemize}
+	\noindent
+	{\bf Output: }
+	\begin{itemize}
+		\item {\bf Local Map}: $\cM^L = \{ \bO_j^L \}$
+	\end{itemize}
+	\noindent
+	{\bf Approaches: }
+	\begin{itemize}
+		\item depend on the recognition module
+	\end{itemize}
+	\noindent
+	{\bf Remarks: } \dots
 	
 \end{document}
