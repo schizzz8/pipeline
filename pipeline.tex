@@ -29,6 +29,7 @@
 		\label{fig:pipeline}
 	\end{figure}
 	
+	\newpage
 	\section{Semantic Map}
 	
 	In our system, a semantic map is a triple:
@@ -43,19 +44,51 @@
 	\begin{itemize}
 		\item $\cR$: global reference system
 		\item $\cM$: metric information obtained from sensors
-		\item $\cP$: predicates compliant with basic concept hierarchy
+		\item $\cP$: predicates compliant with basic concept hierarchy.
 	\end{itemize}
 	
-	More in detail, $\cM$ is a collection of 3D objects, where each object is defined by:
+	\subsection{Global Reference System}	
+	
+	The global reference system is typically defined by the mapping module and is used to express all the elements of the map in a single frame that can be used by the robot to fulfill different tasks (e.g. navigation, manipulation, HRI, etc...).
+	
+	\subsection{Metric Map}	
+		
+	The metric component $\cM$ of the semantic map can be seen as a collection of 3D objects:
+	
+	\begin{equation}
+		\cM = \{\bO_1 \cdots \bO_N\},
+	\end{equation}
+	
+	\noindent	
+	where each object $\bO_i$ is an entity defined by:
 	
 	\begin{itemize}
-		\item {\bf Type}: $\bT = t_i , i=1 \dots N$,
 		\item {\bf Pose3D}: $\bX = [ \bR | \bt] \in SE(3)$,
 		\item {\bf Size3D}: $\bS = <\bL ,\bU> \in \mathbf{R}^3 $,
+		\item {\bf Model3D}: $\bM$, e.g. a point cloud, a mesh and so on.
 	\end{itemize}
 	
+	The adopted convention is that the pose $\bX$ is assumed to refer to the centroid of the object and that the bounding box $\bS$ is defined by two 3D vectors that specify its "lower" and "upper" corners.
+	
+	\subsection{Property Map}	
+		
+	The semantic component $\cP$ contains the assertions about the properties of the objects in $\cM$:
+	
+	\begin{equation}
+	\cP = \{\bP_1 \cdots \bP_N\},
+	\end{equation}
+	
 	\noindent
-	and has a 3D model attached to it, e.g. point cloud, mesh and so on. Possible operations on the map are:
+	where each $\bP_i$ is a set of predicates referred to the object instance $\bo_i$:
+	
+	\begin{equation}
+		\bP_i = \{ P_1(\bo_i) \cdots P_K(\bo_i) \}
+	\end{equation}
+
+
+	\subsection{Interface}
+	
+	Possible operations on the map are:
 	
 	\begin{itemize}
 		\item query for object: given an object it's possible to check if it's already present in the map
@@ -72,10 +105,10 @@
 	\subsection{Notation}
 	
 	\begin{itemize}
-		\item {\bf Object}: $ \bO = < \bT, \bX, \bS > $
-		\item {\bf Map}: $\cM = \{\bO_i\}$  
 		\item {\bf Correspondence}: $ \bc^{i,j}_k = <\bO_i^G,\bO_j^L> $
 	\end{itemize}
+	
+	The $k$-th correspondence $ \bc^{i,j}_k$ establishes that the $j$-th object $\bO_j^L$ in the local map is the "closest" (w.r.t. some similarity measure) to the $i$-th object $\bO_i^G$ in the global map.
 	
 	\subsection{Matching} 
 	
@@ -129,6 +162,7 @@
 	\subsection{Update} 
 	
 	{\bf Problem: } Integrating incoming information from local map into global map. Steps: for each object in local map check if it's already been seen, yes: merge, no: add to map. 
+	
 	\noindent
 	{\bf Input: }
 	\begin{itemize}
@@ -175,7 +209,7 @@
 	
 	\subsection{Filtering}
 	
-	{\bf Problem: } Deciding when to acquire a frame.
+	{\bf Problem: } Decide which frame to consider.
 
 	\noindent
 	{\bf Input: }
@@ -222,7 +256,7 @@
 	
 	\subsection{Extraction}
 	
-	{\bf Problem: } Building local map from the set of detected objects. The first step is to group together pixels with the same semantic label $l_i$. Next, with the depth image $D$, it's possible to recover the 3D position of each image pixel. From this information, the object pose and its size can be inferred, so to build an object:
+	{\bf Problem: } Building local map from the output of recognition. The first step is to group together pixels with the same semantic label $l_i$. Next, with the depth image $D$, it's possible to recover the 3D position of each image pixel. From this information, the object pose and its size can be inferred, so to build an object:
 	
 	\begin{equation}
 	 \bO = < \bT, \bX, \bS > 
