@@ -2,6 +2,7 @@
 
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{amsfonts}
 \usepackage{multirow}
 
 %% Key definitions for text elements. USE THEM
@@ -42,18 +43,18 @@
 	with:
 	
 	\begin{itemize}
-		\item $\cR$: global reference system
+		\item $\cR$: reference system
 		\item $\cM$: metric information obtained from sensors
 		\item $\cP$: predicates compliant with basic concept hierarchy.
 	\end{itemize}
 	
 	\subsection{Global Reference System}	
 	
-	The global reference system is typically defined by the mapping module and is used to express all the elements of the map in a single frame that can be used by the robot to fulfill different tasks (e.g. navigation, manipulation, HRI, etc...).
+	The reference system is used to express all the elements of the map in a single frame.
 	
 	\subsection{Metric Map}	
 		
-	The metric component $\cM$ of the semantic map can be seen as a collection of 3D objects:
+	The metric information $\cM$ of the semantic map can be seen as a collection of 3D objects:
 	
 	\begin{equation}
 		\cM = \{\bO_1 \cdots \bO_N\},
@@ -72,20 +73,15 @@
 	
 	\subsection{Property Map}	
 		
-	The semantic component $\cP$ contains the assertions about the properties of the objects in $\cM$:
+	The semantic information $\cP$ contains the assertions about the properties of the objects in $\cM$:
 	
 	\begin{equation}
 	\cP = \{\bP_1 \cdots \bP_N\},
 	\end{equation}
 	
 	\noindent
-	where each $\bP_i$ is a set of predicates referred to the object instance $\bo_i$:
+	where each $\bP_i$ is a set of predicates of $arity = (1 \dots q)$ that are instances of $\bo_i$ (corresponding to the geometrical object $\bO_i$).
 	
-	\begin{equation}
-		\bP_i = \{ P_1(\bo_i) \cdots P_K(\bo_i) \}
-	\end{equation}
-
-
 	\subsection{Interface}
 	
 	Possible operations on the map are:
@@ -102,32 +98,44 @@
 	
 	The map manager has the task of incrementally update the semantic map with new observations coming from sensors. The update of the map can be done by registering a local frame with the global model. Once objects refer to the same global frame, data association is performed to find correspondences between local and global map and update the global map accordingly.
 	
-	\subsection{Notation}
+	Given the above definition of semantic map, let 
 	
-	\begin{itemize}
-		\item {\bf Correspondence}: $ \bc^{i,j}_k = <\bO_i^G,\bO_j^L> $
-	\end{itemize}
+	\begin{equation}
+		\bE_i \eq < \bO_i,\bP_i >
+	\end{equation}
 	
-	The $k$-th correspondence $ \bc^{i,j}_k$ establishes that the $j$-th object $\bO_j^L$ in the local map is the "closest" (w.r.t. some similarity measure) to the $i$-th object $\bO_i^G$ in the global map.
+	\noindent
+	denote the $i^{th}$ element of $\cSM$, where: $\bO_i \in \cM$ is the metric component (referred to $\cR$) and $\bP_i \in \cP$ the semantic properties. 
+	
+	Depending on $\cR$, we consider two different maps. The global map $\cSM^G_t = < \cR^G, \cM^G, \cP^G >$  is the collection of elements $\{ \bE_1^G \dots \bE_N^G \}$ referred to the global reference frame at time $t$. While, the local map $\cSM^L_t = < \cR^L, \cM^L, \cP^L >$ is the collection of elements $\{ \bE_1^L \dots \bE_M^L \}$ referred to the robot reference frame at time $t$. 
+	
+	This allows us to give a definition of correspondence between objects in the two maps. Namely, the $k$-th correspondence
+	 
+	\begin{equation}
+		\bc^{i,j}_k \eq <\bE_i^G,\bE_j^L> 
+	\end{equation}
+	
+	\noindent
+	establishes that the $j^{th}$ element $\bE_j^L$ in the local map is the "closest" (w.r.t. a similarity metrics) to the $i^{th}$ element $\bE_i^G$ in the global map.
 	
 	\subsection{Matching} 
 	
-	{\bf Problem: }	Finding which objects in the global map $\cM^G$ correspond to the one observed in the local map $\cM^L$. This correspondence is evaluated through a similarity measure $d(O_i^G,O_j^L)$. Thus, finding a correspondence $\bc^{i,j}_k$ consists in finding the object $\bO_j^\star$ that satisfies:
+	{\bf Problem: }	Finding the set of correspondences $\cC_t = \{\bc_1 \dots \bc_K\}$ that states which elements in the global map $\cM^G$ correspond to the one observed in the local map $\cM^L$. This correspondence is evaluated through a similarity measure $d(\bE_i^G,\bE_j^L)$. Thus, computing a correspondence $\bc^{i,j}_k$ consists in finding the element $\bE_j^\star$ that satisfies:
 	
 	\begin{equation}
-		\bO_j^\star = \argmin_{\bO_j} \, d(O_i^G,O_j^L)
+		\bE_j^\star = \argmin_{\bE_j} \, d(\bE_i^G,\bE_j^L)
 	\end{equation}
 		
 	\noindent
 	{\bf Input: }
 	\begin{itemize}
-		\item {\bf Global Map}: $\cM^G_t = \{ \bO_i^G \}$
-		\item {\bf Local Map}: $\cM^L_t = \{ \bO_j^L \}$
+		\item {\bf Global Map}: $\cSM^G_t$
+		\item {\bf Local Map}: $\cSM^L_t$
 	\end{itemize}
 	\noindent
 	{\bf Output: }
 	\begin{itemize}
-		\item {\bf Correspondences}: $\cC_t = \{\bc_k\}$		
+		\item {\bf Correspondences}: $\cC_t$		
 	\end{itemize}
 	\noindent
 	{\bf Approaches: }
@@ -138,7 +146,7 @@
 	\end{itemize}
 	\noindent
 	{\bf Remarks: }
-	Usually, similarity is computed through euclidean distance. In our problem, it's possible to leverage also semantic information. In a simulated environment, the knowledge of the semantic class is perfect. In real world scenarios, object detectors return a probability distribution over semantic labels. In the first case, the corresponding object is the closest one with the same type. In the second case, euclidean distance could be weighted with class probabilities to represent a form of similarity measure.
+	Usually, similarity is computed through euclidean distance. In our problem, we leverage also semantic information. In a simulated environment, the knowledge of the semantic class is perfect. In real world scenarios, object detectors return a probability distribution over semantic labels. In the first case, the corresponding object is the closest one with the same type. In the second case, euclidean distance could be weighted with class probabilities to represent a form of similarity measure.
 		
 		
 %	\begin{table}
@@ -166,9 +174,9 @@
 	\noindent
 	{\bf Input: }
 	\begin{itemize}
-		\item {\bf Global Map}: $\cM_t^G = \{ \bO_i^G \}$
-		\item {\bf Local Map}: $\cM_t^L = \{ \bO_j^L \}$
-		\item {\bf Correspondences}: $\cC_t = \{ \bc_k\}$		
+		\item {\bf Global Map}: $\cSM_t^G$
+		\item {\bf Local Map}: $\cSM_t^L$
+		\item {\bf Correspondences}: $\cC_t$		
 	\end{itemize}
 	\noindent
 	{\bf Output: }
@@ -198,13 +206,14 @@
 	\subsection{Notation}
 	
 	\begin{itemize}
-		\item {\bf Label}: $l_i \in \cL , i=1 \dots N$
-		\item {\bf Pixel}: $\bx = (u,v) \subset \mathbf{N}^2 $
-%		\item {\bf Size2D}: $\bs = < \btl , \bbr > \in \mathbf{N}^2 $
-		\item {\bf RGB image}: $I(\bx) : \bx \rightarrow (r,g,b) \in \mathbf{N}^3$
-		\item {\bf Depth image}: $D(\bx) : \bx \rightarrow d \in \mathbf{R}$		
-		\item {\bf Label image}: $L(\bx) : \bx \rightarrow l_i \in \cL$		
-%		\item {\bf Detection}: $ \bd = < l, \bx, \bs > $
+		\item {\bf Image domain}: $\bOmega = \{(u,v) \in \mN^2 \mid u \in [0,height], v \in [0,width]\}$
+		\item {\bf RGB domain}: $\bGamma = \{(r,g,b) \in \mN^3 \mid r \in [0,255], g \in [0,255], b \in [0,255]\}$
+		\item {\bf Depth domain}: $\bDelta = \{ d \in \mR \mid d \in [0,1]\}$
+		\item {\bf Label domain}: $\bLambda = \{ l \in \mN \mid l \in [0,N]\}$
+		\item {\bf Pixel}: $\bx \in \bOmega$
+		\item {\bf RGB image}: $I : \bOmega \rightarrow \bGamma \implies \bx \rightarrow I(\bx)$
+		\item {\bf Depth image}: $D : \bOmega \rightarrow \bDelta \implies \bx \rightarrow D(\bx)$
+		\item {\bf Label image}: $L : \bOmega \rightarrow \bLambda \implies \bx \rightarrow L(\bx)$
 	\end{itemize}
 	
 	\subsection{Filtering}
@@ -230,15 +239,15 @@
 	\noindent
 	{\bf Remarks: } \dots
 	
-	\subsection{Recognition}
+	\subsection{Recognition}			
 	 
-	{\bf Problem: } Finding instances of known class objects in the input image. More formally, given an RGB image $I$ and a set of semantic labels $\cL$, computes an assignment $L$ of labels $l_i$ to each image pixel $\bx$.
+	{\bf Problem: } Finding instances of known class objects in the input image. More formally, given an RGB image $I$ and a set of semantic labels $\cL = \{ l_1 \dots l_N \}$, computes an assignment $L(\bx)$ of labels $l_i$ to each image pixel $\bx$.
 	
 	\noindent
 	{\bf Input: }
 	\begin{itemize}
 		\item {\bf RGB Image}: $I$
-		\item {\bf Semantic Labels}: $\cL = \{l_i\}$
+		\item {\bf Semantic Labels}: $\cL$
 	\end{itemize}
 	\noindent
 	{\bf Output: }
