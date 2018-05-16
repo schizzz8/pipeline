@@ -54,22 +54,22 @@
 	
 	\subsection{Metric Map}	
 		
-	The metric information $\cM$ of the semantic map can be seen as a collection of 3D objects:
+	The metric information $\cM$ of the semantic map can be seen as a collection of 3D geometric models:
 	
 	\begin{equation}
-		\cM = \{\bO_1 \cdots \bO_N\},
+		\cM = \{\bM_1 \cdots \bM_N\},
 	\end{equation}
 	
 	\noindent	
-	where each object $\bO_i$ is an entity defined by:
+	where each model $\bM_i$ is an entity defined by:
 	
 	\begin{itemize}
 		\item {\bf Pose3D}: $\bX = [ \bR | \bt] \in SE(3)$,
 		\item {\bf Size3D}: $\bS = <\bL ,\bU> \in \mathbf{R}^3 $,
-		\item {\bf Model3D}: $\bM$, e.g. a point cloud, a mesh and so on.
+		\item {\bf Representation3D}: e.g. a point cloud, a mesh and so on.
 	\end{itemize}
 	
-	The adopted convention is that the pose $\bX$ is assumed to refer to the centroid of the object and that the bounding box $\bS$ is defined by two 3D vectors that specify its "lower" and "upper" corners.
+	The adopted convention is that the pose $\bX$ is assumed to refer to the centroid of the model and that the bounding box $\bS$ is defined by two 3D vectors that specify its "lower" and "upper" corners.
 	
 	\subsection{Property Map}	
 		
@@ -80,7 +80,7 @@
 	\end{equation}
 	
 	\noindent
-	where each $\bP_i$ is a set of predicates of $arity = (1 \dots q)$ that are instances of $\bo_i$ (corresponding to the geometrical object $\bO_i$).
+	where each $\bP_i$ is a set of predicates of $arity = (1 \dots q)$ that are instances of $\bm_i$ (corresponding to the geometrical object $\bM_i$).
 	
 	\subsection{Interface}
 	
@@ -96,16 +96,16 @@
 	
 	\section{Map Manager}
 	
-	The map manager has the task of incrementally update the semantic map with new observations coming from sensors. The update of the map can be done by registering a local frame with the global model. Once objects refer to the same global frame, data association is performed to find correspondences between local and global map and update the global map accordingly.
+	The map manager has the task of incrementally update the semantic map with new observations coming from sensors. The update of the map can be done by registering a local frame with the global model. Once objects refer to the same global frame, data association can be performed to find correspondences between local and global map and update the global map accordingly.
 	
 	Given the above definition of semantic map, let 
 	
 	\begin{equation}
-		\bE_i \eq < \bO_i,\bP_i >
+		\bE_i \eq < \bM_i,\bP_i >
 	\end{equation}
 	
 	\noindent
-	denote the $i^{th}$ element of $\cSM$, where: $\bO_i \in \cM$ is the metric component (referred to $\cR$) and $\bP_i \in \cP$ the semantic properties. 
+	denote the $i^{th}$ element of $\cSM$, where: $\bM_i \in \cM$ is the metric component (expressed in $\cR$) and $\bP_i \in \cP$ the semantic properties. 
 	
 	Depending on $\cR$, we consider two different maps. The global map $\cSM^G_t = < \cR^G, \cM^G, \cP^G >$  is the collection of elements $\{ \bE_1^G \dots \bE_N^G \}$ referred to the global reference frame at time $t$. While, the local map $\cSM^L_t = < \cR^L, \cM^L, \cP^L >$ is the collection of elements $\{ \bE_1^L \dots \bE_M^L \}$ referred to the robot reference frame at time $t$. 
 	
@@ -116,7 +116,7 @@
 	\end{equation}
 	
 	\noindent
-	establishes that the $j^{th}$ element $\bE_j^L$ in the local map is the "closest" (w.r.t. a similarity metrics) to the $i^{th}$ element $\bE_i^G$ in the global map.
+	establishes that the $j^{th}$ element $\bE_j^L$ in the local map is the "closest" (w.r.t. a similarity measure, see below) to the $i^{th}$ element $\bE_i^G$ in the global map.
 	
 	\subsection{Matching} 
 	
